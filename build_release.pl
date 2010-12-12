@@ -79,12 +79,13 @@ while ( my ($key, $value) = each(%opts) ) {
     }
 
     if ("s" eq $key) {
+        print "trigger set!\n";
         $sets_path = $value;
         $build_sets = 1;
     }
 
 }
-
+exit 0;
 if (("" eq $release) || ("" eq $arch)) {
     die "invalid arch $arch or release $release" ;
 }
