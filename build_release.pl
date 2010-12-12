@@ -23,6 +23,7 @@ my $local_sets_path = '';
 my $retcode = 0;
 my $buildplatform = `uname -s`;
 my $build_sets = 0; 
+my $sets_path = "";
 chomp($buildplatform);
 
 
@@ -78,7 +79,7 @@ while ( my ($key, $value) = each(%opts) ) {
     }
 
     if ("s" eq $key) {
-        my $sets_path = $value;
+        $sets_path = $value;
         $build_sets = 1;
     }
 
