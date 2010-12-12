@@ -188,13 +188,13 @@ if ($fetch) {
 my $short_rel = "$release" ;
 $short_rel =~ s/[.]// ;
 
-if (!$man) {
+if (!$man and -s "$local_sets_path/man$short_rel.tgz") {
     if (!unlink("$local_sets_path/man$short_rel.tgz")) { 
         die "could not remove man page set: $!";
     }
 }
 
-if (!$comp) {
+if (!$comp and -s "$local_sets_path/comp$short_rel.tgz") {
     if (!unlink("$local_sets_path/comp$short_rel.tgz")) {
         die "could not remove compiler set";
     }
@@ -206,7 +206,7 @@ if (!$xbase) {
     }
 }
 
-if (!$games) {
+if (!$games and -s "$local_sets_path/games$short_rel.tgz") {
     if (!unlink("$local_sets_path/games$short_rel.tgz")) {
         die "could not remove game set";
     }
