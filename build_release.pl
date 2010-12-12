@@ -80,9 +80,12 @@ while ( my ($key, $value) = each(%opts) ) {
     }
 
     if ("s" eq $key) {
-        print "trigger set!\n";
         $sets_path = $value;
         $build_sets = 1;
+    }
+
+    if ("o" eq $key) {
+        $iso = $value;
     }
 
 }
@@ -177,4 +180,4 @@ if (! (chdir $build)) {
 }
 
 my $mkisofs = " mkisofs -r -no-emul-boot -b $release/$arch/cdbr "
-$mkisofs = "$mkisofs -c boot.catalog -o OpenBSD.iso $build"
+$mkisofs = "$mkisofs -c boot.catalog -o $iso $build"
