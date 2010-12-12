@@ -170,6 +170,9 @@ elsif ($build_sets) {
         if (!chdir($sets_path)) {
             die "could not chdir to $sets_path";
         }    
+        print "site->$local_sets_path/$site from $sets_path/\n";
+        system('ls');
+        exit 0;
         $retcode = system("tar czf $local_sets_path/$site *");
         if ($retcode) {
             die "tarfile failed";
@@ -202,27 +205,27 @@ if ($fetch) {
 my $short_rel = "$release" ;
 $short_rel =~ s/[.]// ;
 
-if (!$man and -s "$local_sets_path/man$short_rel.tgz") {
-    if (!unlink("$local_sets_path/man$short_rel.tgz")) { 
+if (!$man and -s "man$short_rel.tgz") {
+    if (!unlink("man$short_rel.tgz")) { 
         die "could not remove man page set: $!";
     }
 }
 
-if (!$comp and -s "$local_sets_path/comp$short_rel.tgz") {
-    if (!unlink("$local_sets_path/comp$short_rel.tgz")) {
+if (!$comp and -s "comp$short_rel.tgz") {
+    if (!unlink("$comp$short_rel.tgz")) {
         die "could not remove compiler set";
     }
 }
 
-$retcode = system("ls $local_sets_path/x*");
-if (!$xbase and $retcode) {
-    if (!system("rm $local_sets_path/x*")) {
+$retcode = system("ls $local_sets_path/x* 2> /dev/null");
+if (!$xbase and !$retcode) {
+    if (system("rm x*")) {
         die "could not remove X11 sets";
     }
 }
 
-if (!$games and -s "$local_sets_path/games$short_rel.tgz") {
-    if (!unlink("$local_sets_path/games$short_rel.tgz")) {
+if (!$games and -e -s "$games$short_rel.tgz") {
+    if (!unlink("games$short_rel.tgz")) {
         die "could not remove game set";
     }
 }
