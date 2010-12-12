@@ -18,7 +18,8 @@ my $comp = 0;           # include compiler sets
 my $games = 0;          # include game set
 my $build = '';         # the build dir
 my $mirror = "ftp://ftp.openbsd.org" ;
-my $local_set_path = '';
+my $local_sets_path = '';
+my $retcode = 0;
 
 
 # get the current arch if on OpenBSD
