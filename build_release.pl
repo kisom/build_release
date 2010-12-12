@@ -112,7 +112,6 @@ elsif (system("which mkisofs")) {
 elsif (system("which wget")) {
     die "wget doesn't appear to be installed";
 }
-elsif (system("which 
 else {
     print "building install iso for OpenBSD-$release/$arch\n";
 }
