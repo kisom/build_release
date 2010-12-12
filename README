@@ -1,0 +1,48 @@
+build_release.pl
+
+written by Kyle Isom <coder@kyleisom.net>
+
+builds an OpenBSD install image.
+
+INTRODUCTION
+build_release is designed to build a custom install image equivalent to the
+installXX.iso image offered by the OpenBSD team. It uses a siteXX.tgz set
+to provide the customization.
+
+USAGE:
+./build_release.pl <options> <siteXX.tgz> <path to build image>
+
+Options:
+    -a <arch>   set architecture
+    -r <rel>    set release
+    -s <path>   build siteXX.tgz from <path>
+    -m          include man pages
+    -g          include gamesXX.tgz
+    -x          include X11 sets
+    -c          include compiler sets
+    -m          set the FTP mirror
+    -o <path>   iso output directory
+    -n          do not fetch files
+    
+ARCHITECTURE    
+At this time, the script only supports building images for amd64 and i386. In
+the future, the sparc64 architecture may be supported. If the script is not
+run on an OpenBSD machine, the architecture needs to be manually specified. If
+the build machine is OpenBSD, not specifying an architecture results in the
+script using the same architecture as the host machine. Note that amd64 builds
+may be done on an i386 machine, as no cross-compiling takes place.
+
+RELEASE
+Release is expected to be in the form X.X, i.e. 4.8.
+
+SITE FILES
+The site file may be specified as an argument or built from a root path. For a
+description of the site set, see the OpenBSD FAQ section 4.14. If the -s flag
+is specified, it needs to point to a root directory where the site files are.
+For example:
+    $ ls /tmp/stage/
+    .       ..      etc
+If -s is not specified, the first argument must be the siteXX.tgz file.
+
+
+

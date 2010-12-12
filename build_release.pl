@@ -19,15 +19,15 @@ my $xbase = 0;          # include X11 sets
 my $comp = 0;           # include compiler sets
 my $games = 0;          # include game set
 my $build = '';         # the build dir
-my $create_site = 0;    #
 my $mirror = "ftp://ftp.openbsd.org" ;
 my $local_sets_path = '';
 my $retcode = 0;
 my $buildplatform = `uname -s`;
-my $build_sets = 0; 
+my $build_sets = 0;     # whether to build siteXX from
+                        # staging dir
 my $sets_path = "";
-my $iso = "";
-my $fetch = 1;
+my $iso = "";           # output file
+my $fetch = 1;          # fetch files via ftp
 chomp($buildplatform);
 
 
@@ -40,6 +40,8 @@ if ('OpenBSD' eq $buildplatform) {
     chomp($release);
 }
 else {
+    # if not on OpenSBD, it's harder to pick a default
+    # arch and release
     $arch = '';
     $release = '';
 }
@@ -59,6 +61,7 @@ else {
 #
 getopt('a:r:s:f:o:mgxc', \%opts);   
 
+# parse options and set relevant vars
 while ( my ($key, $value) = each(%opts) ) {
     if ("a" eq $key) {
         $arch = $value;
@@ -103,9 +106,11 @@ while ( my ($key, $value) = each(%opts) ) {
 
 }
 
+# can't build without a release or arch
 if (("" eq $release) || ("" eq $arch)) {
     die "invalid arch $arch or release $release" ;
 }
+# check to make sure the tools needed are present
 elsif (system("which mkisofs")) {
     die "cdrtools doesn't appear to be installed";
 }
@@ -116,6 +121,7 @@ else {
     print "building install iso for OpenBSD-$release/$arch\n";
 }
 
+# set paths for build
 if (scalar @ARGV == 2) {
     $site = $ARGV[0];
     $build = $ARGV[1];
@@ -162,7 +168,10 @@ elsif ($build_sets) {
     $site = $site . '.tgz';
 
     if (-r -d $sets_path) {
-        $retcode = system("tar czf $local_sets_path/$site $sets_path");
+        if (!chdir($local_sets_path)) {
+            die "could not chdir to $sets_path";
+        }    
+        $retcode = system("tar czf $local_sets_path/$site *");
         if ($retcode) {
             die "tarfile failed";
         }
