@@ -3,7 +3,6 @@
 use warnings;
 use strict;
 use Getopt::Std;
-use Cwd;
 
 
 #############
@@ -168,7 +167,7 @@ elsif ($build_sets) {
     $site = $site . '.tgz';
 
     if (-r -d $sets_path) {
-        if (!chdir($local_sets_path)) {
+        if (!chdir($sets_path)) {
             die "could not chdir to $sets_path";
         }    
         $retcode = system("tar czf $local_sets_path/$site *");
@@ -191,9 +190,6 @@ if (-e -z $site) {
 if (!(chdir $local_sets_path)) {
     die "could not chdir to $local_sets_path";
 }
-
-my $pwd = getcwd;
-print "now in $pwd\n";
 
 if ($fetch) {
     $retcode = system("wget --passive-ftp --reject \"*iso\" " .
