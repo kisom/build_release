@@ -184,8 +184,11 @@ if ($fetch) {
     }
 }
 
+my $short_rel = "$release" ;
+$short_rel =~ s/[.]// ;
+
 if (!$man) {
-    if (! (system("rm man*"))) {
+    if (!unlink("$local_sets_path/man$short_rel.tgz")) { 
         die "could not remove man page set: $!";
     }
 }
