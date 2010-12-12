@@ -24,6 +24,7 @@ my $retcode = 0;
 my $buildplatform = `uname -s`;
 my $build_sets = 0; 
 my $sets_path = "";
+my $iso = "";
 chomp($buildplatform);
 
 
@@ -107,23 +108,32 @@ else {
 $local_sets_path = "$build/$release/$arch";
 $mirror = "$mirror/pub/OpenBSD/$release/$arch";
 
+$iso = "$build/release$release.iso";
+$iso =~ s/[.]// ;
 
-if ((!$site) and (!$build_sets)) {
-    $site = "./site$release";
-    $site =~ s/[.]// ;
-    $site = $site . '.tgz';
-}
-elsif ($build_sets) {
-    print "path to sets is: $sets_path\n";
-    exit 0;
-}
-else {
+if (!$build_sets) {
     my $matchsite = "site$release" ;
     $matchsite =~ s/[.]//;
     $matchsite = "$matchsite.tgz";
     if (!($site =~ /^[\/.\w\s]*$matchsite/)) {
         die "invalid site file $site";
     }
+    else {
+        $retcode = system("cp $site $local_sets_path");
+        if (!$retcode) {
+            die "could not copy $site to $local_sets_path";
+        }
+    }
+}
+elsif ($build_sets) {
+    $site = "site$release";
+    $site =~ s/[.]// ;
+    $site = $site . '.tgz';
+
+    $retcode = system("tar czf $local_sets_path/$site $sets_path");
+}
+else {
+    die "invalid site file";
 }
 
 if (-e -z $site) {
@@ -144,3 +154,27 @@ if (0 != $retcode) {
     die "could not fetch release file";
 }
 
+if (!$comp) {
+    if (! (unlink "comp*.tgz")) {
+        die "could not remove compiler set";
+    }
+}
+
+if (!$xbase) {
+    if (! (unlink "x*")) {
+        die "could not remove X11 sets";
+    }
+}
+
+if (!$games) {
+    if (! (unlink "g*")) {
+        die "could not remove game set";
+    }
+}
+
+if (! (chdir $build)) {
+    die "could not chdir to build root!"
+}
+
+my $mkisofs = " mkisofs -r -no-emul-boot -b $release/$arch/cdbr "
+$mkisofs = "$mkisofs -c boot.catalog -o OpenBSD.iso $build"
