@@ -17,10 +17,12 @@ my $xbase = 0;          # include X11 sets
 my $comp = 0;           # include compiler sets
 my $games = 0;          # include game set
 my $build = '';         # the build dir
+my $create_site = 0;    #
 my $mirror = "ftp://ftp.openbsd.org" ;
 my $local_sets_path = '';
 my $retcode = 0;
 my $buildplatform = `uname -s`;
+my $build_sets = 0; 
 chomp($buildplatform);
 
 
@@ -41,12 +43,14 @@ else {
 # options
 #   -a <arch>   set architecture
 #   -r <rel>    set release
-#   -s <site>   siteXX.tgz path
+#   -s <path>   build siteXX.tgz from <path>         
 #   -g          include gamesXX.tgz
 #   -x          include X11 sets
 #   -c          include compiler sets
+#   -m          set the FTP mirror
+#   -o          
 #
-getopt('a:r:s:m:', \%opts);   
+getopt('a:r:s:m:o:gxc', \%opts);   
 
 while ( my ($key, $value) = each(%opts) ) {
     if ("a" eq $key) {
@@ -73,6 +77,11 @@ while ( my ($key, $value) = each(%opts) ) {
         $mirror = "ftp://$value";
     }
 
+    if ("s" eq $key) {
+        my $sets_path = $value;
+        $build_sets = 1;
+    }
+
 }
 
 if (("" eq $release) || ("" eq $arch)) {
@@ -85,6 +94,9 @@ else {
 if (scalar @ARGV == 2) {
     $site = $ARGV[0];
     $build = $ARGV[1];
+}
+elsif ((scalar @ARGV == 1) and ($build_sets)) {
+    $build = $ARGV[0];
 }
 else {
     die "need to specify the site file and the build dir";
@@ -99,7 +111,10 @@ if (!$site) {
     $site =~ s/[.]// ;
     $site = $site . '.tgz';
 }
-
+elsif ($build_sets) {
+    print "path to sets is: $sets_path\n";
+    exit 0;
+}
 else {
     my $matchsite = "site$release" ;
     $matchsite =~ s/[.]//;
