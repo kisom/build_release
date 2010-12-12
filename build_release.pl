@@ -26,6 +26,7 @@ my $buildplatform = `uname -s`;
 my $build_sets = 0; 
 my $sets_path = "";
 my $iso = "";
+my $fetch = 1;
 chomp($buildplatform);
 
 
@@ -53,6 +54,7 @@ else {
 #   -c          include compiler sets
 #   -m          set the FTP mirror
 #   -o <path>   iso output directory         
+#   -n          do not fetch files
 #
 getopt('a:r:s:f:o:mgxc', \%opts);   
 
@@ -92,6 +94,10 @@ while ( my ($key, $value) = each(%opts) ) {
 
     if ("o" eq $key) {
         $iso = $value;
+    }
+
+    if ("n" eq $key) {
+        $fetch = 0;
     }
 
 }
