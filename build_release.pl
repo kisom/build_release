@@ -194,19 +194,19 @@ if (!$man) {
 }
 
 if (!$comp) {
-    if (! (unlink "comp*")) {
+    if (!unlink("$local_sets_path/comp$short_rel.tgz")) {
         die "could not remove compiler set";
     }
 }
 
 if (!$xbase) {
-    if (! (unlink "x*")) {
+    if (!unlink("$local_sets_path/x*")) {
         die "could not remove X11 sets";
     }
 }
 
 if (!$games) {
-    if (! (unlink "g*")) {
+    if (!unlink("$local_sets_path/games$short_rel.tgz")) {
         die "could not remove game set";
     }
 }
