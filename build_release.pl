@@ -108,7 +108,7 @@ $local_sets_path = "$build/$release/$arch";
 $mirror = "$mirror/pub/OpenBSD/$release/$arch";
 
 
-if (!$site) {
+if ((!$site) and (!$build_sets)) {
     $site = "./site$release";
     $site =~ s/[.]// ;
     $site = $site . '.tgz';
