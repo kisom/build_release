@@ -200,7 +200,8 @@ if (!$comp and -s "$local_sets_path/comp$short_rel.tgz") {
     }
 }
 
-if (!$xbase) {
+$retcode = system("ls $local_sets_path/x*")
+if (!$xbase and $retcode) {
     if (!system("rm $local_sets_path/x*")) {
         die "could not remove X11 sets";
     }
