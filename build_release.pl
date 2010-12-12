@@ -178,7 +178,7 @@ if (!$games) {
 }
 
 if (! (chdir $build)) {
-    die "could not chdir to build root!"
+    die "could not chdir to build root!";
 }
 
 my $mkisofs = " mkisofs -r -no-emul-boot -b $release/$arch/cdbr ";
