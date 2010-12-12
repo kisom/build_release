@@ -18,6 +18,7 @@ my $comp = 0;           # include compiler sets
 my $games = 0;          # include game set
 my $build = '';         # the build dir
 my $mirror = "ftp://ftp.openbsd.org" ;
+my $local_set_path = '';
 
 
 # get the current arch if on OpenBSD
@@ -80,6 +81,8 @@ else {
     die "need to specify the site file and the build dir!\n";
 }
 
+$local_set_path = "$build/$release/$arch";
+$mirror = "$mirror/pub/OpenBSD/$release/$arch";
 
 print "number of options: " ;
 print scalar(keys(%opts)) ;
@@ -105,3 +108,12 @@ else {
     }
 }
 
+retcode = system("mkdir -p $local_sets_path");
+if (retcode != 0) {
+    die "could not create $local_sets_path!")
+}
+
+retcode = system("wget --passive-ftp --reject \"*iso\" $mirror/*");
+if (0 != retcode) {
+    die "could not fetch release file!";
+}
