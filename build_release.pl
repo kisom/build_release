@@ -13,6 +13,7 @@ my %opts = ( );         # hash to collect options in
 my $arch = '';          # arch to build release on
 my $release = '';       # stores OpenBSD release 
 my $site = '';
+my $man = '';           # include the man pages
 my $xbase = 0;          # include X11 sets
 my $comp = 0;           # include compiler sets
 my $games = 0;          # include game set
@@ -46,13 +47,14 @@ else {
 #   -a <arch>   set architecture
 #   -r <rel>    set release
 #   -s <path>   build siteXX.tgz from <path>         
+#   -m          include man pages
 #   -g          include gamesXX.tgz
 #   -x          include X11 sets
 #   -c          include compiler sets
 #   -m          set the FTP mirror
 #   -o <path>   iso output directory         
 #
-getopt('a:r:s:m:o:gxc', \%opts);   
+getopt('a:r:s:f:o:mgxc', \%opts);   
 
 while ( my ($key, $value) = each(%opts) ) {
     if ("a" eq $key) {
@@ -61,6 +63,10 @@ while ( my ($key, $value) = each(%opts) ) {
 
     if ("r" eq $key) {
         $release = $value;
+    }
+
+    if ("m" eq $key) {
+        $man = 1;
     }
 
     if ("g" eq $key) {
@@ -75,7 +81,7 @@ while ( my ($key, $value) = each(%opts) ) {
         $comp = 1;
     }
 
-    if ("m" eq $key) {
+    if ("f" eq $key) {
         $mirror = "ftp://$value";
     }
 
@@ -164,6 +170,12 @@ if (0 != $retcode) {
     die "could not fetch release file";
 }
 
+if (!$man) {
+    if (! (unlink "man*.tgz")) {
+        die "could not remove man page set";
+    }
+}
+
 if (!$comp) {
     if (! (unlink "comp*.tgz")) {
         die "could not remove compiler set";
@@ -180,6 +192,11 @@ if (!$games) {
     if (! (unlink "g*")) {
         die "could not remove game set";
     }
+}
+
+# remove floppy boot images
+if (! (unlink "floppy*")) {
+    die "could not remove floppy boot images!"
 }
 
 if (! (chdir $build)) {
