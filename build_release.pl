@@ -73,6 +73,9 @@ while ( my ($key, $value) = each(%opts) ) {
 
 }
 
+if (("" eq $release) || ("" eq $arch)) {
+    die "invalid arch or version!" ;
+}
 
 if (scalar @ARGV == 2) {
     $site = $ARGV[0];
