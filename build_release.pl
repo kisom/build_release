@@ -85,7 +85,7 @@ while ( my ($key, $value) = each(%opts) ) {
     }
 
 }
-exit 0;
+
 if (("" eq $release) || ("" eq $arch)) {
     die "invalid arch $arch or release $release" ;
 }
