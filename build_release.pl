@@ -181,7 +181,7 @@ if (! (chdir $build)) {
     die "could not chdir to build root!"
 }
 
-my $mkisofs = " mkisofs -r -no-emul-boot -b $release/$arch/cdbr "
+my $mkisofs = " mkisofs -r -no-emul-boot -b $release/$arch/cdbr ";
 $mkisofs = "$mkisofs -c boot.catalog -o $iso $build";
 
 $retcode = system($mkisofs);
