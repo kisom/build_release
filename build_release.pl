@@ -111,8 +111,10 @@ else {
 $local_sets_path = "$build/$release/$arch";
 $mirror = "$mirror/pub/OpenBSD/$release/$arch";
 
-$iso = "$build/release$release.iso";
-$iso =~ s/[.]// ;
+if (!$iso) {
+    $iso = "$build/release$release.iso";
+    $iso =~ s/[.]// ;
+}
 
 if (!$build_sets) {
     my $matchsite = "site$release" ;
