@@ -135,7 +135,12 @@ elsif ($build_sets) {
     $site =~ s/[.]// ;
     $site = $site . '.tgz';
 
-    $retcode = system("tar czf $local_sets_path/$site $sets_path");
+    if (-r -d $sets_path) {
+        $retcode = system("tar czf $local_sets_path/$site $sets_path");
+    }
+    else {
+        die "invalid local sets path $sets_path";
+    }
 }
 else {
     die "invalid site file";
