@@ -76,7 +76,7 @@ while ( my ($key, $value) = each(%opts) ) {
 }
 
 if (("" eq $release) || ("" eq $arch)) {
-    die "invalid arch $arch or release $release!" ;
+    die "invalid arch $arch or release $release" ;
 }
 else {
     print "building install iso for OpenBSD-$release/$arch\n";
@@ -87,7 +87,7 @@ if (scalar @ARGV == 2) {
     $build = $ARGV[1];
 }
 else {
-    die "need to specify the site file and the build dir!\n";
+    die "need to specify the site file and the build dir";
 }
 
 $local_sets_path = "$build/$release/$arch";
@@ -104,25 +104,26 @@ else {
     my $matchsite = "site$release" ;
     $matchsite =~ s/[.]//;
     $matchsite = "$matchsite.tgz";
-    if (!($site =~ /^[\/.\w\s]$matchsite/)) {
-        die "invalid site file!";
+    if (!($site =~ /^[\/.\w\s]*$matchsite/)) {
+        die "invalid site file $site";
     }
 }
 
 if (-e -z $site) {
-    die "empty / invalid $site!";
+    die "empty / invalid $site";
 }
 
 $retcode = system("mkdir -p $local_sets_path");
 if ($retcode != 0) {
-    die "could not create $local_sets_path!" ;
+    die "could not create $local_sets_path" ;
 }
 
 if (!(chdir $local_sets_path)) {
-    die "could not chdir to $local_sets_path!";
+    die "could not chdir to $local_sets_path";
 }
 
 $retcode = system("wget --passive-ftp --reject \"*iso\" $mirror/*");
 if (0 != $retcode) {
-    die "could not fetch release file!";
+    die "could not fetch release file";
 }
+
