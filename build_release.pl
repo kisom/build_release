@@ -129,6 +129,13 @@ if (!$iso) {
     $iso =~ s/[.]// ;
 }
 
+if (! -d $local_sets_path) {
+    $retcode = system("mkdir -p $local_sets_path");
+    if ($retcode != 0) {
+        die "could not create $local_sets_path" ;
+    }
+}
+
 if (!$build_sets) {
     my $matchsite = "site$release" ;
     $matchsite =~ s/[.]//;
@@ -161,13 +168,6 @@ else {
 
 if (-e -z $site) {
     die "empty / invalid $site";
-}
-
-if ($fetch) {
-    $retcode = system("mkdir -p $local_sets_path");
-    if ($retcode != 0) {
-        die "could not create $local_sets_path" ;
-    }
 }
 
 if (!(chdir $local_sets_path)) {
