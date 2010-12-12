@@ -106,6 +106,13 @@ while ( my ($key, $value) = each(%opts) ) {
 if (("" eq $release) || ("" eq $arch)) {
     die "invalid arch $arch or release $release" ;
 }
+elsif (system("which mkisofs")) {
+    die "cdrtools doesn't appear to be installed";
+}
+elsif (system("which wget")) {
+    die "wget doesn't appear to be installed";
+}
+elsif (system("which 
 else {
     print "building install iso for OpenBSD-$release/$arch\n";
 }
