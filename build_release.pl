@@ -163,6 +163,9 @@ elsif ($build_sets) {
 
     if (-r -d $sets_path) {
         $retcode = system("tar czf $local_sets_path/$site $sets_path");
+        if ($retcode) {
+            die "tarfile failed";
+        }
     }
     else {
         die "invalid local sets path $sets_path";
