@@ -20,10 +20,12 @@ my $build = '';         # the build dir
 my $mirror = "ftp://ftp.openbsd.org" ;
 my $local_sets_path = '';
 my $retcode = 0;
+my $buildplatform = `uname -s`;
+chomp($buildplatform);
 
 
 # get the current arch if on OpenBSD
-if ('OpenBSD' eq `uname -s`) {
+if ('OpenBSD' eq $buildplatform) {
     # get current arch and release to use as the default
     $arch = `uname -m`;
     $release = `uname -r`; 
@@ -74,7 +76,7 @@ while ( my ($key, $value) = each(%opts) ) {
 }
 
 if (("" eq $release) || ("" eq $arch)) {
-    die "invalid arch or version!" ;
+    die "invalid arch $arch or release $release!" ;
 }
 else {
     print "building install iso for OpenBSD-$release/$arch\n";
