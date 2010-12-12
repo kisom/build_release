@@ -104,15 +104,22 @@ else {
     my $matchsite = "site$release" ;
     $matchsite =~ s/[.]//;
     $matchsite = "$matchsite.tgz";
-    print "$matchsite\n";
     if (!($site =~ /^[\/.\w\s]$matchsite/)) {
         die "invalid site file!";
     }
 }
 
+if (-e -z $site) {
+    die "empty / invalid $site!";
+}
+
 $retcode = system("mkdir -p $local_sets_path");
 if ($retcode != 0) {
     die "could not create $local_sets_path!" ;
+}
+
+if (!(chdir $local_sets_dir)) {
+    die "could not chdir to $local_sets_dir!";
 }
 
 $retcode = system("wget --passive-ftp --reject \"*iso\" $mirror/*");
