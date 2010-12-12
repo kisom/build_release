@@ -178,7 +178,8 @@ my $pwd = getcwd;
 print "now in $pwd\n";
 
 if ($fetch) {
-    $retcode = system("wget --passive-ftp --reject \"*iso\" $mirror/*");
+    $retcode = system("wget --passive-ftp --reject \"*iso\" " .
+                      "--reject \"floppy*\" $mirror/*");
     if (0 != $retcode) {
         die "could not fetch release file";
     }
@@ -200,7 +201,7 @@ if (!$comp) {
 }
 
 if (!$xbase) {
-    if (!unlink("$local_sets_path/x*")) {
+    if (!system("rm $local_sets_path/x*")) {
         die "could not remove X11 sets";
     }
 }
