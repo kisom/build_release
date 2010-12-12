@@ -214,7 +214,8 @@ if (!$games and -s "$local_sets_path/games$short_rel.tgz") {
 }
 
 # remove floppy boot images
-if (! (unlink "floppy*")) {
+$retcode = system("ls $local_sets_path/floppy*");
+if ($retcode and (! (unlink "floppy*"))) {
     die "could not remove floppy boot images!"
 }
 
