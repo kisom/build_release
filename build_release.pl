@@ -177,7 +177,7 @@ if (!$man) {
 }
 
 if (!$comp) {
-    if (! (unlink "comp*.tgz")) {
+    if (! (unlink "comp*")) {
         die "could not remove compiler set";
     }
 }
