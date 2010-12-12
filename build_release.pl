@@ -182,7 +182,7 @@ if ($fetch) {
 
 if (!$man) {
     if (! (unlink "man*")) {
-        die "could not remove man page set: $?";
+        die "could not remove man page set: $!";
     }
 }
 
