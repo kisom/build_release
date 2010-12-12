@@ -50,7 +50,7 @@ else {
 #   -x          include X11 sets
 #   -c          include compiler sets
 #   -m          set the FTP mirror
-#   -o          
+#   -o <path>   iso output directory         
 #
 getopt('a:r:s:m:o:gxc', \%opts);   
 
@@ -181,3 +181,12 @@ if (! (chdir $build)) {
 
 my $mkisofs = " mkisofs -r -no-emul-boot -b $release/$arch/cdbr "
 $mkisofs = "$mkisofs -c boot.catalog -o $iso $build"
+
+$retcode = system($mkisofs);
+if (!$retcode) {
+    die "mkisofs failed";
+}
+else {
+    print "\n\n\ncreated $iso\n";
+}
+
