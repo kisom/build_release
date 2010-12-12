@@ -85,14 +85,6 @@ else {
 $local_sets_path = "$build/$release/$arch";
 $mirror = "$mirror/pub/OpenBSD/$release/$arch";
 
-print "number of options: " ;
-print scalar(keys(%opts)) ;
-print "\n";
-
-print "number of arguments: ";
-print scalar @ARGV;
-print "\n";
-
 
 if (!$site) {
     $site = "./site$release";
@@ -101,9 +93,9 @@ if (!$site) {
 }
 
 else {
-    my $matchsite = 'site ' + $release ;
+    my $matchsite = "site$release" ;
     $matchsite =~ s/[.]//;
-    $matchsite = $site + '.tgz';
+    $matchsite = "$site.tgz";
     if (!($site =~ /^[\/.\w\s]$matchsite/)) {
         die "invalid site file!";
     }
