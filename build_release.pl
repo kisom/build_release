@@ -162,18 +162,22 @@ if (-e -z $site) {
     die "empty / invalid $site";
 }
 
-$retcode = system("mkdir -p $local_sets_path");
-if ($retcode != 0) {
-    die "could not create $local_sets_path" ;
+if ($fetch) {
+    $retcode = system("mkdir -p $local_sets_path");
+    if ($retcode != 0) {
+        die "could not create $local_sets_path" ;
+    }
 }
 
 if (!(chdir $local_sets_path)) {
     die "could not chdir to $local_sets_path";
 }
 
-$retcode = system("wget --passive-ftp --reject \"*iso\" $mirror/*");
-if (0 != $retcode) {
-    die "could not fetch release file";
+if ($fetch) {
+    $retcode = system("wget --passive-ftp --reject \"*iso\" $mirror/*");
+    if (0 != $retcode) {
+        die "could not fetch release file";
+    }
 }
 
 if (!$man) {
