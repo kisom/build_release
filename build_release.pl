@@ -227,7 +227,7 @@ my $mkisofs = " mkisofs -r -no-emul-boot -b $release/$arch/cdbr ";
 $mkisofs = "$mkisofs -c boot.catalog -o $iso $build";
 
 $retcode = system($mkisofs);
-if (!$retcode) {
+if ($retcode) {
     die "mkisofs failed";
 }
 else {
