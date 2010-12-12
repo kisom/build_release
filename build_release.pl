@@ -96,6 +96,7 @@ else {
     my $matchsite = "site$release" ;
     $matchsite =~ s/[.]//;
     $matchsite = "$site.tgz";
+    print "$matchsite\n";
     if (!($site =~ /^[\/.\w\s]$matchsite/)) {
         die "invalid site file!";
     }
