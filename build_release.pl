@@ -3,6 +3,7 @@
 use warnings;
 use strict;
 use Getopt::Std;
+use Cwd;
 
 
 #############
@@ -172,6 +173,9 @@ if ($fetch) {
 if (!(chdir $local_sets_path)) {
     die "could not chdir to $local_sets_path";
 }
+
+my $pwd = getcwd;
+print "now in $pwd\n";
 
 if ($fetch) {
     $retcode = system("wget --passive-ftp --reject \"*iso\" $mirror/*");
