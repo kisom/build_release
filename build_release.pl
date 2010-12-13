@@ -62,6 +62,7 @@ getopt('a:r:s:f:o:mgxc', \%opts);
 
 # parse options and set relevant vars
 while ( my ($key, $value) = each(%opts) ) {
+    print "key: $key\tvalue: $value\n";
     if ("a" eq $key) {
         $arch = $value;
     }
@@ -110,10 +111,10 @@ if (("" eq $release) || ("" eq $arch)) {
     die "invalid arch $arch or release $release" ;
 }
 # check to make sure the tools needed are present
-elsif (system("which mkisofs")) {
+elsif (system("which mkisofs 2>&1 > /dev/null")) {
     die "cdrtools doesn't appear to be installed";
 }
-elsif (system("which wget")) {
+elsif (system("which wget 2>&1 > /dev/null")) {
     die "wget doesn't appear to be installed";
 }
 else {
@@ -147,7 +148,7 @@ if (! -d $local_sets_path) {
     }
 }
 
-if (!$build_sets) {
+if (! $build_sets) {
     my $matchsite = "site$release" ;
     $matchsite =~ s/[.]//;
     $matchsite = "$matchsite.tgz";
@@ -156,23 +157,20 @@ if (!$build_sets) {
     }
     else {
         $retcode = system("cp $site $local_sets_path");
-        if (!$retcode) {
+        if ($retcode) {
             die "could not copy $site to $local_sets_path";
         }
     }
 }
-elsif ($build_sets) {
+else {
     $site = "site$release";
     $site =~ s/[.]// ;
     $site = $site . '.tgz';
 
-    if (-r -d $sets_path) {
+    if (-d $sets_path) {
         if (!chdir($sets_path)) {
             die "could not chdir to $sets_path";
         }    
-        print "site->$local_sets_path/$site from $sets_path/\n";
-        system('ls');
-        exit 0;
         $retcode = system("tar czf $local_sets_path/$site *");
         if ($retcode) {
             die "tarfile failed";
@@ -181,9 +179,6 @@ elsif ($build_sets) {
     else {
         die "invalid local sets path $sets_path";
     }
-}
-else {
-    die "invalid site file";
 }
 
 if (-e -z $site) {
@@ -212,19 +207,19 @@ if (!$man and -s "man$short_rel.tgz") {
 }
 
 if (!$comp and -s "comp$short_rel.tgz") {
-    if (!unlink("$comp$short_rel.tgz")) {
-        die "could not remove compiler set";
+    if (!unlink("comp$short_rel.tgz")) {
+        die "could not remove compiler set: $!";
     }
 }
 
-$retcode = system("ls $local_sets_path/x* 2> /dev/null");
+$retcode = system("ls x* 2> /dev/null");
 if (!$xbase and !$retcode) {
     if (system("rm x*")) {
         die "could not remove X11 sets";
     }
 }
 
-if (!$games and -e -s "$games$short_rel.tgz") {
+if (!$games and -e -s "games$short_rel.tgz") {
     if (!unlink("games$short_rel.tgz")) {
         die "could not remove game set";
     }
