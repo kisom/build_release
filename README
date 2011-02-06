@@ -4,6 +4,9 @@ written by Kyle Isom <coder@kyleisom.net>
 
 builds an OpenBSD install image.
 
+LICENSE
+Dual licensed public domain and ISC-licensed.
+
 INTRODUCTION
 build_release is designed to build a custom install image equivalent to the
 installXX.iso image offered by the OpenBSD team. It uses a siteXX.tgz set

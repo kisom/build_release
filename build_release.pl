@@ -1,4 +1,8 @@
 #!/usr/bin/env perl
+# build_release.pl - build an OpenBSD release
+# originally written by Kyle Isom <coder@kyleisom.net>
+# 
+# public domain / ISC dual-licensed - see LICENSE.
 
 use warnings;
 use strict;
