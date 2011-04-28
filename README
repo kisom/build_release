@@ -18,7 +18,6 @@ USAGE:
 Options:
     -a <arch>   set architecture
     -r <rel>    set release
-    -s <path>   build siteXX.tgz from <path>
     -s none     do not add site tarball
     -m          include man pages
     -g          include gamesXX.tgz
@@ -27,6 +26,7 @@ Options:
     -m          set the FTP mirror
     -o <path>   iso output directory
     -n          do not fetch files
+    -v          vanilla build (no siteXX.tgz)
     
 ARCHITECTURE    
 At this time, the script only supports building images for amd64 and i386. In

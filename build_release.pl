@@ -31,6 +31,7 @@ my $build_sets = 0;     # whether to build siteXX from
 my $sets_path = "";
 my $iso = "";           # output file
 my $fetch = 1;          # fetch files via ftp
+my $no_custom = 0;      # do not include a custom site file
 chomp($buildplatform);
 
 
@@ -62,8 +63,9 @@ else {
 #   -m          set the FTP mirror
 #   -o <path>   iso output directory         
 #   -n          do not fetch files
+#   -v          use a vanilla build (no siteXX)
 #
-getopt('a:r:s:f:o:mgxc', \%opts);   
+getopt('a:r:s:f:o:mngxc', \%opts);   
 
 # parse options and set relevant vars
 while ( my ($key, $value) = each(%opts) ) {
@@ -98,7 +100,6 @@ while ( my ($key, $value) = each(%opts) ) {
 
     if ("s" eq $key) {
         $sets_path = $value;
-        $build_sets = 1;
     }
 
     if ("o" eq $key) {
@@ -107,6 +108,10 @@ while ( my ($key, $value) = each(%opts) ) {
 
     if ("n" eq $key) {
         $fetch = 0;
+    }
+
+    if ("v" eq $key) {
+        $no_custom = 1;
     }
 
 }
@@ -134,6 +139,11 @@ if (scalar @ARGV == 2) {
 elsif ((scalar @ARGV == 1) and ($build_sets)) {
     $build = $ARGV[0];
 }
+
+elsif ((scalar @ARGV == 1) and ($no_custom)) {
+    $build = $ARGV[0];
+}
+
 else {
     die "need to specify the site file and the build dir";
 }
@@ -153,7 +163,7 @@ if (! -d $local_sets_path) {
     }
 }
 
-if (! $build_sets) {
+if ((! $build_sets) and (! $no_custom)) {
     my $matchsite = "site$release" ;
     $matchsite =~ s/[.]//;
     $matchsite = "$matchsite.tgz";
@@ -167,7 +177,7 @@ if (! $build_sets) {
         }
     }
 }
-else {
+elsif (! $no_custom) {
     $site = "site$release";
     $site =~ s/[.]// ;
     $site = $site . '.tgz';
@@ -195,6 +205,7 @@ if (!(chdir $local_sets_path)) {
 }
 
 if ($fetch) {
+    print "fetching sets...\n";
     $retcode = system("wget --passive-ftp --reject \"*iso\" " .
                       "--reject \"floppy*\" $mirror/*");
     if (0 != $retcode) {
