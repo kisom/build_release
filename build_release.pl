@@ -54,6 +54,7 @@ else {
 #   -a <arch>   set architecture
 #   -r <rel>    set release
 #   -s <path>   build siteXX.tgz from <path>         
+#   -s none     do not add in a site file
 #   -m          include man pages
 #   -g          include gamesXX.tgz
 #   -x          include X11 sets
