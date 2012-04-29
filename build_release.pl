@@ -7,6 +7,7 @@
 use warnings;
 use strict;
 use Getopt::Std;
+use Data::Dumper;
 
 
 #############
@@ -65,11 +66,10 @@ else {
 #   -n          do not fetch files
 #   -v          use a vanilla build (no siteXX)
 #
-getopt('a:r:s:f:o:mngxc', \%opts);   
+getopts('vmngxca:r:s:f:o:', \%opts);   
 
 # parse options and set relevant vars
 while ( my ($key, $value) = each(%opts) ) {
-    print "key: $key\tvalue: $value\n";
     if ("a" eq $key) {
         $arch = $value;
     }
@@ -110,7 +110,8 @@ while ( my ($key, $value) = each(%opts) ) {
         $fetch = 0;
     }
 
-    if ("v" eq $key) {
+   if ("v" eq $key) {
+        print "vanilla\n"; 
         $no_custom = 1;
     }
 
@@ -242,8 +243,10 @@ if (!$games and -e -s "games$short_rel.tgz") {
 }
 
 # remove floppy boot images
+print "local sets path: $local_sets_path\n";
 $retcode = system("ls $local_sets_path/floppy*");
-if (!$retcode and (! (unlink "floppy*"))) {
+printf "retcode: $retcode\n";
+if (!$retcode and (!unlink glob "floppy*")) {
     die "could not remove floppy boot images!"
 }
 
